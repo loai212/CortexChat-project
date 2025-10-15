@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CortexChat</title>
+  <link rel="stylesheet" href="css/style.css" /> 
+</head>
+
+<body>
+  
+  <div class="chat-container">
+ <div class="project-header">CortexChat</div>
+    <div class="chat-thread">
+      <div class="message user">
+    <p>Hello</p>
+      </div>
+      <div class="message ai">
+        <p>Hi there! How can I help?</p>
+      </div>
+    </div>
+    <form class="chat-input">
+      <input type="text" placeholder="Type your message..." />
+      <button type="submit">➤</button>
+    </form>
+  </div>
+
+
+<script>
+  const form = document.querySelector('.chat-input');
+  const input = form.querySelector('input');
+  const thread = document.querySelector('.chat-thread');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
+
+    // Show user message
+    const userBubble = document.createElement('div');
+    userBubble.className = 'message user';
+    userBubble.innerHTML = `<p>${userMessage}</p>`;
+    thread.appendChild(userBubble);
+    input.value = '';
+
+    // Show loading bubble
+    const loadingBubble = document.createElement('div');
+    loadingBubble.className = 'message ai';
+    loadingBubble.innerHTML = `<p><em>...</em></p>`;
+    thread.appendChild(loadingBubble);
+    thread.scrollTop = thread.scrollHeight;
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+      });
+
+      const data = await res.json();
+      loadingBubble.innerHTML = `<p>${data.reply}</p>`;
+      thread.scrollTop = thread.scrollHeight;
+    } catch (err) {
+      loadingBubble.innerHTML = `<p>⚠️ Error: ${err.message}</p>`;
+    }
+  });
+</script>
+
+
+</body>
+</html>
