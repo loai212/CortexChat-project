@@ -2,6 +2,8 @@
 
 CortexChat is a fast, lightweight AI chatbot built with Node.js, Express, and OpenRouter. It delivers intelligent, real-time responses using free multi-model AI APIs — no billing required.
 
+live link (https://cortexchat-project-production.up.railway.app/)
+
 ## 🚀 Features
 
 - 🔒 Secure backend with `.env` support
